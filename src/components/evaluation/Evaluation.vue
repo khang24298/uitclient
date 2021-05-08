@@ -20,22 +20,22 @@
           <div class="card-body p-0">
             <ul class="users-list clearfix latest">
               <li>
-                <img class="user-logo" src="../../../dist/img/user2-160x160.jpg" alt="User Image">
+                <img class="user-logo" src="../../../public/img/user2-160x160.jpg" alt="User Image">
                 <a class="users-list-name" href="#">Alexander</a>
                 <span class="users-list-date">Not Yet</span>
               </li>
               <li>
-                <img class="user-logo" src="../../../dist/img/user5-128x128.jpg" alt="User Image">
+                <img class="user-logo" src="../../../public/img/user5-128x128.jpg" alt="User Image">
                 <a class="users-list-name" href="#">Sarah</a>
                 <span class="users-list-date">Not Yet</span>
               </li>
               <li>
-                <img class="user-logo" src="../../../dist/img/user4-128x128.jpg" alt="User Image">
+                <img class="user-logo" src="../../../public/img/user4-128x128.jpg" alt="User Image">
                 <a class="users-list-name" href="#">Nora</a>
                 <span class="users-list-date">Not Yet</span>
               </li>
               <li>
-                <img class="user-logo" src="../../../dist/img/user3-128x128.jpg" alt="User Image">
+                <img class="user-logo" src="../../../public/img/user3-128x128.jpg" alt="User Image">
                 <a class="users-list-name" href="#">Nadia</a>
                 <span class="users-list-date">Not Yet</span>
               </li>
@@ -153,62 +153,62 @@
           <div class="card-body p-0">
             <ul class="users-list all-users clearfix">
               <li>
-                <img class="user-logo" src="../../../dist/img/user2-160x160.jpg" alt="User Image">
+                <img class="user-logo" src="../../../public/img/user2-160x160.jpg" alt="User Image">
                 <a class="users-list-name" href="#">Alexander</a>
                 <span class="users-list-date">13 Jan</span>
               </li>
               <li>
-                <img class="user-logo" src="../../../dist/img/user5-128x128.jpg" alt="User Image">
+                <img class="user-logo" src="../../../public/img/user5-128x128.jpg" alt="User Image">
                 <a class="users-list-name" href="#">Sarah</a>
                 <span class="users-list-date">14 Jan</span>
               </li>
               <li>
-                <img class="user-logo" src="../../../dist/img/user4-128x128.jpg" alt="User Image">
+                <img class="user-logo" src="../../../public/img/user4-128x128.jpg" alt="User Image">
                 <a class="users-list-name" href="#">Nora</a>
                 <span class="users-list-date">15 Jan</span>
               </li>
               <li>
-                <img class="user-logo" src="../../../dist/img/user3-128x128.jpg" alt="User Image">
+                <img class="user-logo" src="../../../public/img/user3-128x128.jpg" alt="User Image">
                 <a class="users-list-name" href="#">Nadia</a>
                 <span class="users-list-date">15 Jan</span>
               </li>
               <li>
-                <img class="user-logo" src="../../../dist/img/user3-128x128.jpg" alt="User Image">
+                <img class="user-logo" src="../../../public/img/user3-128x128.jpg" alt="User Image">
                 <a class="users-list-name" href="#">Nadia</a>
                 <span class="users-list-date">15 Jan</span>
               </li>
               <li>
-                <img class="user-logo" src="../../../dist/img/user4-128x128.jpg" alt="User Image">
+                <img class="user-logo" src="../../../public/img/user4-128x128.jpg" alt="User Image">
                 <a class="users-list-name" href="#">Nora</a>
                 <span class="users-list-date">15 Jan</span>
               </li>
               <li>
-                <img class="user-logo" src="../../../dist/img/user5-128x128.jpg" alt="User Image">
+                <img class="user-logo" src="../../../public/img/user5-128x128.jpg" alt="User Image">
                 <a class="users-list-name" href="#">Sarah</a>
                 <span class="users-list-date">14 Jan</span>
               </li>
               <li>
-                <img class="user-logo" src="../../../dist/img/user2-160x160.jpg" alt="User Image">
+                <img class="user-logo" src="../../../public/img/user2-160x160.jpg" alt="User Image">
                 <a class="users-list-name" href="#">Alexander</a>
                 <span class="users-list-date">13 Jan</span>
               </li>
               <li>
-                <img class="user-logo" src="../../../dist/img/user3-128x128.jpg" alt="User Image">
+                <img class="user-logo" src="../../../public/img/user3-128x128.jpg" alt="User Image">
                 <a class="users-list-name" href="#">Nadia</a>
                 <span class="users-list-date">15 Jan</span>
               </li>
               <li>
-                <img class="user-logo" src="../../../dist/img/user4-128x128.jpg" alt="User Image">
+                <img class="user-logo" src="../../../public/img/user4-128x128.jpg" alt="User Image">
                 <a class="users-list-name" href="#">Nora</a>
                 <span class="users-list-date">15 Jan</span>
               </li>
               <li>
-                <img class="user-logo" src="../../../dist/img/user5-128x128.jpg" alt="User Image">
+                <img class="user-logo" src="../../../public/img/user5-128x128.jpg" alt="User Image">
                 <a class="users-list-name" href="#">Sarah</a>
                 <span class="users-list-date">14 Jan</span>
               </li>
               <li>
-                <img class="user-logo" src="../../../dist/img/user4-128x128.jpg" alt="User Image">
+                <img class="user-logo" src="../../../public/img/user4-128x128.jpg" alt="User Image">
                 <a class="users-list-name" href="#">Nora</a>
                 <span class="users-list-date">15 Jan</span>
               </li>

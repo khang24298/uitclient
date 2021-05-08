@@ -173,7 +173,7 @@
             <div class="col-12 border">
                 <div class="post mt-3">
                   <div class="user-block">
-                    <img class="img-circle img-bordered-sm" src="../../../dist/img/user7-128x128.jpg" alt="user image">
+                    <img class="img-circle img-bordered-sm" src="../../../public/img/user7-128x128.jpg" alt="user image">
                     <span class="username">
                       <a href="#">Jonathan Burke Jr.</a>
                     </span>
@@ -193,7 +193,7 @@
 
                 <div class="post clearfix mb-3">
                   <div class="user-block d-block">
-                    <img class="img-circle img-bordered-sm" src="../../../dist/img/user1-128x128.jpg" alt="User Image">
+                    <img class="img-circle img-bordered-sm" src="../../../public/img/user1-128x128.jpg" alt="User Image">
                     <span class="username">
                       <a href="#">You</a>
                     </span>

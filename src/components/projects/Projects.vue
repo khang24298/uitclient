@@ -80,16 +80,16 @@
                             <!-- {{ getUsersInProject(project) }} -->
                               <!-- <li class="list-inline-item" v-for="user in usersInProject[project.id]" :key="user.id">
                                   {{ user.name }}
-                                  <img alt="Avatar" class="table-avatar" src="../../../dist/img/avatar.png">
+                                  <img alt="Avatar" class="table-avatar" src="../../../public/img/avatar.png">
                               </li> -->
                               <li class="list-inline-item">
-                                  <img alt="Avatar" class="table-avatar" src="../../../dist/img/avatar2.png">
+                                  <img alt="Avatar" class="table-avatar" src="../../../public/img/avatar2.png">
                               </li>
                               <li class="list-inline-item">
-                                  <img alt="Avatar" class="table-avatar" src="../../../dist/img/avatar3.png">
+                                  <img alt="Avatar" class="table-avatar" src="../../../public/img/avatar3.png">
                               </li>
                               <li class="list-inline-item">
-                                  <img alt="Avatar" class="table-avatar" src="../../../dist/img/avatar4.png">
+                                  <img alt="Avatar" class="table-avatar" src="../../../public/img/avatar4.png">
                               </li>
                           </ul>
                       </td>
