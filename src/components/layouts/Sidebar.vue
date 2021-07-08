@@ -14,10 +14,12 @@
         <!-- Sidebar user (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex" v-if="authenticated">
             <div class="image">
-                <img src="../../../public/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+                <div class="circle border shadow" >
+                    <span class="initials">{{ formatName(user.name) }}</span>  
+                </div>
             </div>
             <div class="info">
-                <a href="#" class="d-block">{{ user.name}}</a>
+                <a class="d-block" style="white-space:pre-wrap">{{ user.name}}</a>
             </div>
             <div class="logout ml-5">
                 <b-button @click.prevent="signOut">
@@ -35,27 +37,32 @@
                     <router-link to="/" class="nav-link">
                     <i class="nav-icon fas fa-tachometer-alt"></i>
                     <p>
-                        Dashboard
+                        Trang chủ
                     </p>
                     </router-link>
                 </li>
-                
-                <li class="nav-item" v-if="user.role > 2">
-                    <router-link to="/criteria" class="nav-link">
+                <li class="nav-item">
+                    <router-link to="/report" class="nav-link">
                     <i class="nav-icon far fa-calendar-alt"></i>
-                    <p>Criteria Manager</p>
+                    <p>Thống kê</p>
                     </router-link>
                 </li>
                 <li class="nav-item" v-if="user.role > 2">
+                    <router-link to="/criteria" class="nav-link">
+                    <i class="nav-icon far fa-calendar-alt"></i>
+                    <p>Quản lý tiêu chí</p>
+                    </router-link>
+                </li>
+                <li class="nav-item">
                     <router-link to="/evaluation" class="nav-link">
                     <i class="nav-icon far fa-circle text-info"></i>
-                    <p>Evaluation</p>
+                    <p>Đánh giá</p>
                     </router-link>
                 </li>
                 <li class="nav-item">
                     <router-link to="/ranking" class="nav-link">
                     <i class="nav-icon far fa-circle"></i>
-                    <p>Ranking</p>
+                    <p>Xếp hạng</p>
                     </router-link>
                 </li>
                 
@@ -63,7 +70,7 @@
                     <router-link to="/about" class="nav-link">
                     <i class="nav-icon far fa-calendar-alt"></i>
                     <p>
-                        About
+                        Về chúng tôi
                     </p>
                     </router-link>
                 </li>
@@ -89,6 +96,11 @@ export default {
       })
     },
     methods: {
+        formatName(name){
+            let fullname = name.split(' ')
+            let initials = fullname.shift().charAt(0) + fullname.pop().charAt(0);
+            return initials.toUpperCase();
+        },
         ...mapActions({
             logOut: "auth/logOut"
         }),
@@ -104,9 +116,27 @@ export default {
               }
           })
           .catch(err => {
-            console.log(err)
+              console.log(err)
           })
         }
     }
 }
 </script>
+
+<style scoped>
+.circle {
+  border-radius: 50%;
+  height: 2.5rem;
+  text-align: center;
+  width: 2.5rem;
+  background-color: #ccc;
+  position: relative;
+}
+
+.initials {
+  font-size: calc(2.5rem / 2); /* 50% of parent */
+  line-height: 1;
+  position: relative;
+  top: calc(2.5rem / 5); /* 25% of parent */
+}
+</style>

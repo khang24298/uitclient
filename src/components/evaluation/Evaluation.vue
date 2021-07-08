@@ -1,44 +1,34 @@
 <template>
   <div class="content-wrapper">
-    <div class="row">
-      <div class="col-lg-12 bg-white border m-1 pt-1 text-center">
-        <h3 class="float-left"><strong>UIT Evaluation</strong></h3>
-        <h3 class="">April 7, 2021</h3>
+    <!-- For manager -->
+    <div class="row" v-if="userInfo.role > 2">
+      <div class="col-lg-12 d-flex bg-white border m-1 pt-1 text-center">
+        <h3 class="col-lg-6 text-left"><strong class="text-left">UIT Evaluation</strong></h3>
+        <input class="border border-light" type="date" name="date" v-model="date" id="date" @change="changeDate($event)"/>
       </div>
       <div class="col-lg-4">
         <!-- USERS LIST LATEST -->
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title">Unevaluated Members</h3>
+            <h3 class="card-title">Thành viên mới</h3>
 
             <div class="card-tools">
-              <span class="badge badge-danger">4 New Members</span>
+              <span class="badge badge-danger">4 thành viên mới</span>
 
             </div>
           </div>
           <!-- /.card-header -->
           <div class="card-body p-0">
             <ul class="users-list clearfix latest">
-              <li>
-                <img class="user-logo" src="../../../public/img/user2-160x160.jpg" alt="User Image">
-                <a class="users-list-name" href="#">Alexander</a>
-                <span class="users-list-date">Not Yet</span>
-              </li>
-              <li>
-                <img class="user-logo" src="../../../public/img/user5-128x128.jpg" alt="User Image">
-                <a class="users-list-name" href="#">Sarah</a>
-                <span class="users-list-date">Not Yet</span>
-              </li>
-              <li>
-                <img class="user-logo" src="../../../public/img/user4-128x128.jpg" alt="User Image">
-                <a class="users-list-name" href="#">Nora</a>
-                <span class="users-list-date">Not Yet</span>
-              </li>
-              <li>
-                <img class="user-logo" src="../../../public/img/user3-128x128.jpg" alt="User Image">
-                <a class="users-list-name" href="#">Nadia</a>
-                <span class="users-list-date">Not Yet</span>
-              </li>
+              <evaluation-detail v-for="item in limitBy(orderBy(usersList, 'id', -1),4)" 
+              :key="item.id"
+              :user="item"
+              :userCriteria="userCriteria"
+              :month="month"
+              :year="year"
+              >
+              </evaluation-detail>
+              
             </ul>
             
             <!-- /.users-list -->
@@ -46,181 +36,83 @@
           <!-- /.card-body -->
           <!-- /.card-footer -->
         </div>
-        <div class="card">
-              <div class="card-header text-center">
-                <h3 class="card-title ">Good Performance</h3>
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body p-0">
-                <table class="table table-striped">
-                  <thead>
-                    <tr>
-                      <th style="width: 10px">#</th>
-                      <th>User</th>
-                      <th>Score</th>
-                      <th style="width: 40px">Last Periods</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>1.</td>
-                      <td>Nguyen Thi C</td>
-                      <td>
-                        110/120
-                      </td>
-                      <td><span class="badge bg-success">15%</span></td>
-                    </tr>
-                    <tr>
-                      <td>2.</td>
-                      <td>Mai Van Tai</td>
-                      <td>
-                        105/120
-                      </td>
-                      <td><span class="badge bg-success">14%</span></td>
-                    </tr>
-                    <tr>
-                      <td colspan="4"><a href="/ranking">View all</a></td>
-                    </tr>
-                    
-                  </tbody>
-                </table>
-              </div>
 
-              <div class="card-header text-center">
-                <h3 class="card-title ">Warning</h3>
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body p-0">
-                <table class="table table-striped">
-                  <thead>
-                    <tr>
-                      <th style="width: 10px">#</th>
-                      <th>User</th>
-                      <th>Score</th>
-                      <th style="width: 40px">Last Periods </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>1.</td>
-                      <td>Pham Van E</td>
-                      <td>
-                        56/120
-                      </td>
-                      <td><span class="badge bg-danger">30%</span></td>
-                    </tr>
-                    <tr>
-                      <td>2.</td>
-                      <td>Ngo Van C</td>
-                      <td>
-                        65/120
-                      </td>
-                      <td><span class="badge bg-warning">21%</span></td>
-                    </tr>
-                    <tr>
-                      <td colspan="4"><a href="/ranking">View all</a></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <!-- /.card-body -->
-            </div>
+        <Ranking :month="month" :year="year"/>
         <!--/.card -->
       </div>
-      <div class="col-lg-8">
-        <div class="card">
-          <div class="card-header row ml-0">
-            <div class="col-lg-3">
-              <h3 class="card-title">Members</h3>
+      <Members :usersList="limitBy(usersList,usersList.length-4)" :userCriteria="userCriteria" :month="month" :year="year"/>
+    </div>
+
+    <!-- For Staff -->
+    <div v-else>
+      <div class="row">
+        <h3 class="col-lg-12 bg-white border m-1 pt-1 text-center">
+          <input class="border border-light" type="date" name="date" v-model="date" id="date" @change="changeDate($event)"/>
+        </h3>
+      </div>
+      
+      <div class="row">
+        <div class="col-6">
+          <div class="card p-2 user-info col-12">
+            <h4 class="text-center border-bottom">{{ userInfo.name}}</h4>
+            <div class="d-flex col-lg-12">
+              <img class="col-lg-4 user-logo" src="../../../public/img/user2-160x160.jpg" alt="User Image">
+              <p class="phone col-lg-4">
+                <b>Phone:</b> <br>
+                {{ userInfo.phone}}
+                <br>
+                <br>
+                <br>
+
+                <b>Cấp bậc:</b>
+                <br>
+                Cán bộ giảng dạy
+              </p>
+               <p class="col-lg-4 email">
+                <b>Email:</b> <br>
+                {{ userInfo.email}}
+                <br>
+                <br>
+                <b>Phòng/Khoa:</b> <br>
+                Khoa học và Kỹ thuật thông Tin
+              </p>
             </div>
-            <div class="search-user col-lg-7">
-              <form class="form-inline ml-3">
-                <div class="input-group input-group-sm">
-                  <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
-                  <div class="input-group-append border">
-                    <button class="btn btn-navbar" type="submit">
-                      <i class="fas fa-search"></i>
-                    </button>
-                  </div>
+          </div>
+          <div class="user-evaluation">
+            <div class="item d-flex" v-for="item in staffCriteria" :key="item.id">
+              <b-button @mouseover="openHover(item.id)" @mouseleave="closeHover()" class="bg-white borderd shadow col-lg-8 mt-1">
+                <div class="popup" v-if="idHover == item.id && item.description !== ''"><p class="inner">{{ item.description }}</p></div>
+                <span class="float-left" >{{ item.criteria_name }}</span>
+                <strong class="float-right" >Tối đa: {{ item.max_score }}</strong>
+              </b-button>
+              <div class="col-lg-4 border shadow m-1 bg-white" v-if="item.score">
+                <div class="evaluation-range">
+                  <div class=""><b>Điểm đánh giá:</b><span class="float-right text-bold">{{ item.score }}</span></div>
                 </div>
-              </form>
+                <div style="overflow-x:auto" >
+                  <span><b> Nhận xét:</b> {{ item.note }} </span>
+                </div>
+              </div>
             </div>
-            <div class="card-tools">
-              <span class="badge badge-danger">Total 12 Members</span>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="card">
+            <div class="">
+              <div class="bg-gray border-bottom d-flex text-center ">
+                <span class="col-1 text-bold">ID</span>
+                <span class="col-5 text-bold">Tên công việc</span>
+                <span class="col-2 text-bold">Số điểm</span>
+                <span class="col-4 text-bold">Ngày đánh giá</span>
+              </div>
+              <div class="btn bg-white borderd shadow col-12 mt-1" v-for="task in taskUserEvaluation" :key="task.id">
+                <span class="col-1 float-left">{{ task.id }}</span>
+                <router-link class="col-5 float-left" :to="'/project/'+task.project_id+'?task='+task.id"><span style="color:blue!important; text-decoration:underline;">{{ task.task_name }}</span></router-link>
+                <span class="col-2 float-left">{{ task.score }}</span>
+                <span class="col-4 float-left">{{ task.created_at | filterDate }}</span>
+              </div>
             </div>
           </div>
-          <!-- /.card-header -->
-          <div class="card-body p-0">
-            <ul class="users-list all-users clearfix">
-              <li>
-                <img class="user-logo" src="../../../public/img/user2-160x160.jpg" alt="User Image">
-                <a class="users-list-name" href="#">Alexander</a>
-                <span class="users-list-date">13 Jan</span>
-              </li>
-              <li>
-                <img class="user-logo" src="../../../public/img/user5-128x128.jpg" alt="User Image">
-                <a class="users-list-name" href="#">Sarah</a>
-                <span class="users-list-date">14 Jan</span>
-              </li>
-              <li>
-                <img class="user-logo" src="../../../public/img/user4-128x128.jpg" alt="User Image">
-                <a class="users-list-name" href="#">Nora</a>
-                <span class="users-list-date">15 Jan</span>
-              </li>
-              <li>
-                <img class="user-logo" src="../../../public/img/user3-128x128.jpg" alt="User Image">
-                <a class="users-list-name" href="#">Nadia</a>
-                <span class="users-list-date">15 Jan</span>
-              </li>
-              <li>
-                <img class="user-logo" src="../../../public/img/user3-128x128.jpg" alt="User Image">
-                <a class="users-list-name" href="#">Nadia</a>
-                <span class="users-list-date">15 Jan</span>
-              </li>
-              <li>
-                <img class="user-logo" src="../../../public/img/user4-128x128.jpg" alt="User Image">
-                <a class="users-list-name" href="#">Nora</a>
-                <span class="users-list-date">15 Jan</span>
-              </li>
-              <li>
-                <img class="user-logo" src="../../../public/img/user5-128x128.jpg" alt="User Image">
-                <a class="users-list-name" href="#">Sarah</a>
-                <span class="users-list-date">14 Jan</span>
-              </li>
-              <li>
-                <img class="user-logo" src="../../../public/img/user2-160x160.jpg" alt="User Image">
-                <a class="users-list-name" href="#">Alexander</a>
-                <span class="users-list-date">13 Jan</span>
-              </li>
-              <li>
-                <img class="user-logo" src="../../../public/img/user3-128x128.jpg" alt="User Image">
-                <a class="users-list-name" href="#">Nadia</a>
-                <span class="users-list-date">15 Jan</span>
-              </li>
-              <li>
-                <img class="user-logo" src="../../../public/img/user4-128x128.jpg" alt="User Image">
-                <a class="users-list-name" href="#">Nora</a>
-                <span class="users-list-date">15 Jan</span>
-              </li>
-              <li>
-                <img class="user-logo" src="../../../public/img/user5-128x128.jpg" alt="User Image">
-                <a class="users-list-name" href="#">Sarah</a>
-                <span class="users-list-date">14 Jan</span>
-              </li>
-              <li>
-                <img class="user-logo" src="../../../public/img/user4-128x128.jpg" alt="User Image">
-                <a class="users-list-name" href="#">Nora</a>
-                <span class="users-list-date">15 Jan</span>
-              </li>
-            </ul>
-            
-            <!-- /.users-list -->
-          </div>
-          <!-- /.card-body -->
-          <div class="card-footer text-center">
-            <a href="javascript:">View All Users</a>
-          </div>
-          <!-- /.card-footer -->
         </div>
       </div>
     </div>
@@ -228,8 +120,117 @@
 </template>
 
 <script>
-export default {
+import Ranking from '@/components/evaluation/ShortRanking'
+import Members from '@/components/evaluation/Members'
+import EvaluationDetail from './EvaluationDetail.vue'
 
+import {mapGetters} from 'vuex'
+import Vue2Filters from 'vue2-filters'
+var today = new Date();
+
+export default {
+  name:"Evaluation",
+  components:{
+    Ranking, 
+    Members,
+    EvaluationDetail
+  },
+  mixins: [Vue2Filters.mixin],
+  data(){
+    return{
+      usersList:[],
+      userCriteria:[],
+      date: today.toISOString().slice(0,10),
+      month: today.getMonth()+1,
+      year: today.getFullYear(),
+      staffEvaluation:[],
+      staffCriteria:[],
+      idHover:null,
+      taskUserEvaluation:[],
+      hasBeenEvalued: false,
+    }
+  },
+  computed: {
+    ...mapGetters({
+      userInfo: 'auth/user',
+    }),
+  },
+  mounted(){
+    if(this.userInfo.role > 2){
+
+      this.axios.get('/users').
+      then(res=>this.usersList = res.data.data )
+
+      this.axios.post("/getUserCriteriaList").
+      then( res => this.userCriteria = res.data.data)
+    }
+    else{
+
+      this.axios.get(`/getUserCriteriaByUserID/`+this.userInfo.id+'/'+this.month+'/'+this.year)
+      .then(res => this.staffCriteria = res.data.data)
+      this.axios.get(`/getUserEvaluationByUserID/`+this.userInfo.id+'/'+this.month+'/'+this.year)
+      .then(res=>{
+        if(res.data.data.length > 0){
+          this.staffEvaluation = res.data.data
+          this.hasBeenEvalued = true
+        }
+      })
+      this.axios.get(`/getTaskEvaluationListByUserId/`+this.userInfo.id+'/'+this.month +'/'+this.year)
+      .then(res => console.log(res))
+    }
+  },
+  methods:{
+    openHover(e){
+      this.idHover = e
+    },
+    closeHover(){
+      this.idHover = null;
+    },
+    changeDate(e){
+      this.hasBeenEvalued = false;
+      let choosenDate = e.target.value;
+      this.year = new Date(choosenDate).getFullYear();
+      this.month = new Date(choosenDate).getMonth()+1;
+    }
+  },
+  watch: {
+      month:function(){
+        if(this.userInfo.role <= 2){
+          this.axios.get(`/getUserCriteriaByUserID/`+this.userInfo.id+'/'+this.month+'/'+this.year)
+          .then(res => this.staffCriteria = res.data.data)
+
+          this.axios.get(`/getUserEvaluationByUserID/`+this.userInfo.id+'/'+this.month+'/'+this.year)
+          .then(res=>{
+            if(res.data.data.length > 0){
+              this.staffEvaluation = res.data.data
+              this.hasBeenEvalued = true
+            }
+          })
+
+          this.axios.get(`/getTaskEvaluationListByUserId/`+this.userInfo.id+'/'+this.month +'/'+this.year)
+          .then(res => this.taskUserEvaluation = res.data.data)
+        }
+      },
+      year:function(){
+        if(this.userInfo.role <= 2){
+          this.axios.get(`/getUserCriteriaByUserID/`+this.userInfo.id+'/'+this.month+'/'+this.year)
+          .then(res => this.staffCriteria = res.data.data)
+
+          this.axios.get(`/getUserEvaluationByUserID/`+this.userInfo.id+'/'+this.month+'/'+this.year)
+          .then(res=>{
+            if(res.data.data.length > 0){
+              this.staffEvaluation = res.data.data
+              this.hasBeenEvalued = true
+            }
+          })
+
+          this.axios.get(`/getTaskEvaluationListByUserId/`+this.userInfo.id+'/'+this.month +'/'+this.year)
+          .then(res => this.taskUserEvaluation = res.data.data)
+        }
+      }
+      
+  },
+  
 }
 </script>
 
@@ -240,22 +241,42 @@ li .user-logo{
 .latest>li img{
   border: 3px solid #03fc1c
 }
-.all-users > li{
-  width: 10%;
+.user{
+  border: none;
+  background: none;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
 }
-.input-group-append .btn-navbar{
-  align-self: baseline;
+.user-logo{
+  width: 6em;
 }
-.input-group-append{
-  height: 2%;
+.popup {
+  position: absolute;
+  left: 18%;
+  top: -25px;
+  transform: translate3d(0, -50%, 0);
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+  background: white;
+  border-radius: 100px;
+  width: 60%;
 }
-.search-user input{
-  height: auto;
+
+.popup:after {
+   content: "";
+  width: 15px;
+  height: 15px;
+  transform: rotate(-45deg);
+  background: #fff;
+  position: absolute;
+  border-radius: 10px;
+  box-shadow: 1px 4px 8px rgba(0, 0, 0, 0.5);
+  bottom: -7px;
+  left: calc(50% - 10px);
 }
-.search-user .input-group{
-  width: 50%;
-}
-.text-center{
-  text-align: center;
+.inner {
+  padding: 10px 0;
+  background: #fff;
+  border-radius: 100px;
 }
 </style>

@@ -5,12 +5,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Projects</h1>
+            <h1>Dự án</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Projects</li>
+              <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+              <li class="breadcrumb-item active">Dự án</li>
             </ol>
           </div>
         </div>
@@ -21,24 +21,17 @@
     <section class="content">
       <!-- Default box -->
       <b-alert show dismissible variant="success" v-if="isSuccess == 'Success'">
-        <h5><i class="icon fas fa-check"></i> Success!</h5>
-        Success adding new project!
+        <h5><i class="icon fas fa-check"></i> Thành công!</h5>
+        Tạo mới dự án thành công!
       </b-alert>
       <b-alert show dismissible variant="danger" v-if="isSuccess == false">
-        <h5><i class="icon fas fa-ban"></i> Fail!</h5>
-        There is an error while adding new project!
+        <h5><i class="icon fas fa-ban"></i> Thất bại!</h5>
+        Tạo mới dự án thất bại!
       </b-alert>
       <div class="card">
-        <div class="card-header" v-if="user.role > 2">
-          <b-button v-b-modal.mymodal>Create new Project</b-button>
-          <div class="card-tools">
-            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-              <i class="fas fa-minus"></i>
-            </button>
-            <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
-              <i class="fas fa-times"></i>
-            </button>
-          </div>
+        <div class="card-header" v-if="userInfo.role > 2">
+          <b-button style="background-color:#1a75ff" v-b-modal="'mymodal'">Tạo mới dự án</b-button>
+          
         </div>
         <div class="card-body p-0">
           <table class="table table-striped projects">
@@ -48,74 +41,54 @@
                           #
                       </th>
                       <th style="width: 20%">
-                          Project Name
+                          Tên dự án
                       </th>
                       <th style="width: 30%">
-                          Team Members
+                          Thành viên
                       </th>
                       <th>
-                          Project Progress
+                          Tiến độ
                       </th>
                       <th style="width: 8%" class="text-center">
-                          Status
+                          Kết thúc
                       </th>
                   </tr>
               </thead>
               <tbody>
-                  <tr v-for="project in projects" :key="project.id">
+                  <tr v-for="item in projects" :key="item.id">
                       <td>
-                          {{ project.id }}
+                          {{ item.id }}
                       </td>
                       <td>
-                          <router-link :to="'/project/' + project.id">
-                              {{ project.project_name }}
+                          <router-link :to="'/project/' + item.id">
+                              {{ item.project_name }}
                           </router-link>
                           <br/>
                           <small>
-                              Created: {{ project.created_at | formatDate }}
+                              Bắt đầu: {{ item.start_date | filterDate }}
                           </small>
                       </td>
                       <td>
                           <ul class="list-inline">
-                            <!-- {{ getUsersInProject(project) }} -->
-                              <!-- <li class="list-inline-item" v-for="user in usersInProject[project.id]" :key="user.id">
-                                  {{ user.name }}
-                                  <img alt="Avatar" class="table-avatar" src="../../../public/img/avatar.png">
-                              </li> -->
-                              <li class="list-inline-item">
-                                  <img alt="Avatar" class="table-avatar" src="../../../public/img/avatar2.png">
-                              </li>
-                              <li class="list-inline-item">
+                              <User :project="item">
+                              </User>
+                              
+                              <!-- <li class="list-inline-item">
                                   <img alt="Avatar" class="table-avatar" src="../../../public/img/avatar3.png">
                               </li>
                               <li class="list-inline-item">
                                   <img alt="Avatar" class="table-avatar" src="../../../public/img/avatar4.png">
-                              </li>
+                              </li> -->
                           </ul>
                       </td>
-                      <td class="project_progress" v-if="isOdd(project.id) == 1">
-
-                          <div class="progress progress-sm" >
-                              <div class="progress-bar bg-green" role="progressbar" aria-valuenow="57" aria-valuemin="0" aria-valuemax="100" style="width: 57%">
-                              </div>
-                          </div>
-                          <small>
-                              57% Complete
-                          </small>
-                      </td>
-                      <td class="project_progress" v-if="isOdd(project.id) !== 1">
-
-                          <div class="progress progress-sm" >
-                              <div class="progress-bar bg-green" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-                              </div>
-                          </div>
-                          <small>
-                              100% Complete
-                          </small>
+                      <td class="project_progress">
+                          <k-progress :percent="item.progress" :color="getColor(item.progress)"></k-progress>
+                        
                       </td>
                       <td class="project-state">
-                          <span v-if="isOdd(project.id) !== 1" class="badge badge-success">Completed</span>
-                          <span v-if="isOdd(project.id) == 1" class="badge badge-failed">In progress</span>
+                          <span v-if="item.progress == 100" class="badge badge-success">{{ item.end_date | filterDate}}</span>
+                          <span v-else-if="isExpiredProject(item.end_date) == true" class="badge badge-danger">{{ item.end_date | filterDate}}</span>
+                          <span v-else class="badge badge-failed">{{ item.end_date | filterDate}}</span>
                       </td>
                   </tr>
 
@@ -128,16 +101,16 @@
 
     </section>
     <!-- /.content -->
-    <section class="project-create" v-if="user.role > 2">
-      <b-modal ref="mymodal" id="mymodal" >
+    <section class="project-create" v-if="userInfo.role > 2">
+      <b-modal hide-backdrop ref="mymodal" id="mymodal" >
         <template #modal-title>
-            <h4>Create New Project</h4>
+            <h4>Tạo mới dự án</h4>
         </template>
         <div class="modal-body">
           <b-form >
             <b-form-group
               id="input-group-1"
-              label="Project Name:"
+              label="Tên dự án:"
               label-for="input-1"
             >
               <b-form-input
@@ -149,17 +122,17 @@
               ></b-form-input>
             </b-form-group>
 
-            <b-form-group id="input-group-2" label="Description:" label-for="input-2">
+            <b-form-group id="input-group-2" label="Mô tả:" label-for="input-2">
               <b-form-textarea
                 id="input-2"
                 v-model="project.description"
-                placeholder="Key Results"
+                placeholder="ex: Mô tả dự án"
                 rows="6"
                 max-rows="10"
               ></b-form-textarea>
             </b-form-group>
 
-            <b-form-group id="input-group-3" label="Start Date" label-for="input-3">
+            <b-form-group id="input-group-3" label="Bắt đầu" label-for="input-3">
               <b-form-input
                 id="input-3"
                 v-model="project.start_date"
@@ -168,7 +141,7 @@
               ></b-form-input>
             </b-form-group>
 
-            <b-form-group id="input-group-4" label="End Date:" label-for="input-4">
+            <b-form-group id="input-group-4" label="Kết thúc:" label-for="input-4">
               <b-form-input
                 id="input-4"
                 v-model="project.end_date"
@@ -179,10 +152,10 @@
           </b-form>
         </div>
         <template #modal-footer>
-          <b-button @click="onSubmit" class="btn-primary">
-            Save
+          <b-button @click="onSubmit" class="btn-success">
+            Lưu
           </b-button>
-          <b-button id="toggle-btn" @click="toggleModal">Cancel</b-button>
+          <b-button class="border btn-light" id="toggle-btn" @click="toggleModal">Huỷ</b-button>
         </template>
       </b-modal>
     </section>
@@ -192,11 +165,16 @@
 </template>
 
 <script>
+var day = new Date();
 import {mapGetters} from 'vuex'
+import User from '@/components/users/UserInfo';
 export default {
   name: 'Projects',
   props: {
     msg: String
+  },
+  components:{
+    User,
   },
   data () {
     return {
@@ -207,9 +185,9 @@ export default {
         start_date: "",
         end_date: ""
       },
+      users:[],
       isSuccess: null,
-      user: null,
-      usersInProject:[]
+      today: day.toISOString().slice(0,10)
     }
   },
   computed: {
@@ -217,13 +195,30 @@ export default {
       userInfo: 'auth/user',
     })
   },
-  mounted: function() {
-    this.user = (this.userInfo) ? this.userInfo : null
-    this.axios.get(`/getProjectsUserJoinedOrCreated/`+this.user.id).then(res => this.projects = res.data.data)
+  mounted() {
+    this.axios.get(`/getProjectsUserJoinedOrCreated/`+this.userInfo.id).then(res => {
+      this.projects = res.data.data
+    })
   },
   methods:{
-    isOdd(number){
-      return number%2;
+    getColor(percent) {
+      if(percent < 40){
+        return '#ffc069';
+      } else if(percent < 60) {
+        return '#fadb14';
+      } else if(percent < 80) {
+        return '#13c2c2';
+      } else {
+        return '#389e0d';
+      }
+    },
+    isExpiredProject(date){
+      if(Date.parse(date) < Date.parse(this.today)){
+        return true
+      }
+      else{
+        return false
+      }
     },
     onSubmit(){
       this.axios.post('/projects',this.project)
@@ -242,9 +237,6 @@ export default {
     toggleModal() {
       this.$refs['mymodal'].toggle('#toggle-btn')
     },
-    getUsersInProject(project){
-      return this.axios.get(`/getUsersJoinedProject/`+project.id).then(res => this.usersInProject[project.id] = res.data.data)
-    }
   }
 }
 </script>

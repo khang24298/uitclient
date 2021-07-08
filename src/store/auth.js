@@ -3,7 +3,8 @@ export default{
     namespaced: true, 
     state: {
         token: null,
-        user: null
+        user: null,
+        error: null,
     },
     getters:{
         authenticated(state){
@@ -11,6 +12,9 @@ export default{
         },
         user(state){
             return state.user
+        },
+        error(state){
+            return state.error
         }
     },
     mutations:{
@@ -19,27 +23,31 @@ export default{
         },
         SET_USER(state, data){
             state.user = data
+        },
+        SET_ERROR(state, error){
+            state.error = error
         }
     },
 
     actions:{
-        async logIn({dispatch},credentials){
+        async logIn({dispatch,commit},credentials){
             let response = await axios.post('/login', credentials)
+            commit('SET_ERROR', response.data.message)
             return dispatch('attempt',response.data.token)
         },
         async attempt({commit, state}, token){
             if(token){
                 commit('SET_TOKEN',token)
             }
-            if(! state.token){
-                return 
+            if(!state.token){
+                return;
             }
-            // axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.setItem('token',token);
+
             try {
                 let response = await axios.get('/currentUser')
                 commit('SET_USER', response.data.data)
             } catch (error) {
-                console.log(error)
+                (error)
             }
         },
         logOut({commit}){

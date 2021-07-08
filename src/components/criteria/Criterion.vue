@@ -1,10 +1,10 @@
 <template>
     <div class="criterion">
         <b-button class="bg-white border-0 w-100 d-flex" id="toggle-btn" v-b-modal="'modal_'+criterion.id">
-            <div class="title col-lg-10">{{criterion.criteria_name}}</div>
-            <div class="score col-lg-2"><strong>Max: {{criterion.max_score}}</strong></div>
+            <div class="title col-lg-9">{{criterion.criteria_name}}</div>
+            <div class="score col-lg-3"><strong>Max: {{criterion.max_score}}</strong></div>
         </b-button>
-        <b-modal ref="modal" :id="'modal_'+criterion.id">
+        <b-modal hide-backdrop ref="modal" :id="'modal_'+criterion.id">
             <template #modal-title>
                 {{ criterion.criteria_name }}
             </template>
@@ -12,28 +12,39 @@
                 <b-form>
                     <b-form-group
                     id="input-group-1"
-                    label="Criteria Name:"
+                    label="Tên tiêu chí:"
                     label-for="input-1"
                     >
-                    <b-form-input
-                        id="input-1"
-                        v-model="criterion.criteria_name"
-                        type="email"
-                        placeholder="ex: Hoàn thành đúng hạn"
-                        required
-                    ></b-form-input>
+                        <b-form-input
+                            id="input-1"
+                            v-model="criterion.criteria_name"
+                            type="email"
+                            placeholder="ex: Hoàn thành đúng hạn"
+                            required
+                        ></b-form-input>
                     </b-form-group>
 
-                    <b-form-group id="input-group-2" label="Max Score:" label-for="input-2">
-                    <strong class="float-right">{{ criterion.max_score }}</strong>
-                    <b-form-input
-                        id="input-2"
-                        type="range"
-                        v-model="criterion.max_score"
-                        placeholder="ex: 100"
-                        min="0" max="100" step="5"
-                        required
-                    ></b-form-input>
+                    <b-form-group id="description_criteria" label="Mô tả:" label-for="description"
+                    >
+                        <b-textarea
+                            id="description"
+                            v-model="criterion.description"
+                            type="text"
+                            required  
+                            rows="3"
+                        ></b-textarea>
+                    </b-form-group>
+
+                    <b-form-group id="input-group-2" label="Điểm tối đa:" label-for="input-2">
+                        <strong class="float-right">{{ criterion.max_score }}</strong>
+                        <b-form-input
+                            id="input-2"
+                            type="range"
+                            v-model="criterion.max_score"
+                            placeholder="ex: 100"
+                            min="0" max="100" step="5"
+                            required
+                        ></b-form-input>
                     
                     </b-form-group>
                     
@@ -48,7 +59,7 @@
                     {{ criterion.score }} 
                     </b-form-group>-->
 
-                    <b-form-group id="input-group-4" label="Type: " label-for="input-4">
+                    <b-form-group id="input-group-4" label="Loại: " label-for="input-4">
                     <b-form-select
                         id="input-4"
                         v-model="criterion.criteria_type_id"
@@ -61,13 +72,13 @@
                 </b-form>
             </div>
             <template #modal-footer>
-                <div class="w-100 d-flex">
+                <div class="w-100 ">
                     <b-button
                         variant="danger"
                         size="sm"
                         class="ml-2 float-left"
                         @click.prevent="onDelete"
-                    >Cancel
+                    >Xoá
                     </b-button>
 
                     <b-button
@@ -75,7 +86,7 @@
                         size="sm"
                         class="ml-2 float-right"
                         @click="toggleModal"
-                    >Cancel
+                    >Huỷ
                     </b-button>
 
                     <b-button
@@ -84,7 +95,7 @@
                         class="float-right"
                         @click.prevent="onSubmit"
                     >
-                        Save
+                        Lưu
                     </b-button>
                 
                 
@@ -110,6 +121,12 @@ export default {
                     name: "User"
                 }
             ]
+        }
+    },
+    mounted(){
+        if(Number(this.$route.query.criterion) == Number(this.criterion.id)){
+            let criteria_modal = 'modal_'+ Number(this.$route.query.criterion)
+            this.$bvModal.show(criteria_modal)
         }
     },
     methods:{

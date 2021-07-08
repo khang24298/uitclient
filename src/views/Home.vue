@@ -17,6 +17,7 @@ import Footer from '@/components/layouts/Footer.vue'
 
 export default {
   name: 'Home',
+  title: 'UIT - Trang chủ',
   components: {
     Projects,
     Header,

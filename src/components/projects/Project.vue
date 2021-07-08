@@ -1,30 +1,28 @@
 <template>
-  <div class="content-wrapper">
+  <div class="content-wrapper overflow-auto">
     <div class="tasks-board">
-      <div class=" overflow-x-scroll py-12 d-flex">
-        <div class="btn-create-task" v-if="user.role > 2">
-          <b-button id="btn-modal" v-b-modal.modalCreate class="bg-danger shadow border-0 btn-add">
+      <div class="btn-create-task" v-if="user.role > 2">
+          <b-button id="btn-modal" v-b-modal.modalCreate class="bg-primary shadow border-0 btn-add">
             <b-icon class="plus-icon" icon="plus-square"></b-icon>
           </b-button>
         </div>
-
-          <draggable v-for="list in tasksLists" :key="list.status.id" ghost-class="ghost-card" class="kanban-column bg-gray-100 rounded-lg px-3 py-3 column-width rounded mr-4" group="tasks" :animation="200">
-            <p class="text-gray-700 font-semibold font-sans tracking-wide text-sm text-center">{{ list.status.name | uppercase }}</p>
+      <div class="overflow-x-scroll py-12 d-inline-flex">
+          <draggable :disabled="list.status.type_id == 4" v-for="list in tasksLists" :key="list.status.type_id" :id="list.status.type_id" @end="updateStatus" ghost-class="ghost-card" class="kanban-column bg-gray-100 rounded-lg px-1 py-3 column-width rounded" group="tasks" :animation="200">
+              <p class="text-gray-700 font-semibold font-sans tracking-wide text-sm text-center">{{ list.status.name | uppercase }}</p>
               <task-card 
-              v-for="item in list.tasks"
+              v-for="item in orderBy(list.tasks,'priority',1)"
               :key="item.id"
+              :id="item.id"
               :task="item"
-              @updatedList="reload = $event"
+              @update="reload"
               :user="user"
-              :taskCriteria="taskCriteria"
               :manager="manager_list"
               :staff="staff_list"
               :status_list="status_list"
-              class="mt-3 cursor-move task"
               >
               </task-card>
           </draggable>
-        <TaskNew v-if="user.role > 2" :listTask="tasksLists[0].tasks" :manager="manager_list" :staff="staff_list"/>
+        <TaskNew v-if="user.role > 2" :taskCriteria="taskCriteria" @update="reload" :manager="manager_list" :staff="staff_list"/>
       </div>
       
     </div>
@@ -36,6 +34,7 @@ import draggable from "vuedraggable";
 import TaskCard from "../tasks/TaskCard.vue";
 import TaskNew from "../tasks/TaskNew.vue";
 import {mapGetters} from 'vuex'
+import Vue2Filters from 'vue2-filters'
 
 export default {
   name: "Project",
@@ -44,6 +43,7 @@ export default {
     TaskNew,
     draggable,
   },
+  mixins: [Vue2Filters.mixin],
   data() {
     return {
       tasksLists: [Object],
@@ -52,7 +52,6 @@ export default {
       status_list: [],
       user: Object,
       taskCriteria: [],
-      reload: 0
     };
   },
   computed: {
@@ -61,36 +60,29 @@ export default {
     })
   },
   mounted () {
+    // this.axios.get(`/project/`+this.params.id).then(res => this.project = res.data.data)
     this.user = (this.userInfo) ? this.userInfo : null
     this.axios.get('/status').then(res => this.status_list = res.data.data)
     this.axios.get(`/getTasksByProjectID/`+this.$route.params.id).then( res => this.tasksLists = res.data.data)
-    this.axios.get('/criteria').then(res=> this.taskCriteria = res.data.data)
+    this.axios.post('/getTaskCriteriaList').then(res=> this.taskCriteria = res.data.data)
     this.axios.get('/getUsersWithEmployeeRole').then( res => this.staff_list = res.data.data)
     this.axios.get('/getUsersWithManagerRole').then( res => this.manager_list = res.data.data)
   },
-  watch: {
-    reload: function(newVal,oldVal){
-      console.log(newVal)
-      console.log(oldVal)
-      if(newVal != oldVal){
-        this.axios.get(`/getTasksByProjectID/`+this.$route.params.id).then( res => this.tasksLists = res.data.data) 
-        console.log(this.tasksLists)
-      }
-    }
-  },
   methods: {
+    reload(e){
+        (e)
+        this.axios.get(`/getTasksByProjectID/`+this.$route.params.id).then( res => this.tasksLists = res.data.data) 
+    },
     updateStatus (e) {
-      console.log(e.task)
-      console.log(e.to.id)
-      this.axios.put(`/tasks/`+this.task,{ "status_id": e.to.id })
-      .then(res=>{
-        if(res.data.data){
-          console.log(res.data.data)
-        }
-        else{
-          console.log(res.data.message)
-        }
-      })
+      if(e.from.id != e.to.id){
+          this.axios.post('/updateTaskStatus',{ 
+            "task_id": e.item.id,
+            "status_id": e.to.id 
+          })
+          .then(res=>{
+            console.log(res)
+          })
+      }
     }
   },
 }
@@ -107,7 +99,7 @@ export default {
   margin-left:5vw;
 }
 .column-width {
-  width: 16vw;
+  width: 18vw;
 }
 /* Unfortunately @apply cannot be setup in codesandbox, 
 but you'd use "@apply border opacity-50 border-blue-500 bg-gray-200" here */
@@ -128,10 +120,13 @@ but you'd use "@apply border opacity-50 border-blue-500 bg-gray-200" here */
   width: 3.5em;
   height: 3.5em;
   border-radius:50%;
+  position: absolute;
+  margin-left: 16em;
 }
 .btn-create-task{
-  margin-top:3em;
-  margin-left: -3em;
+  margin-top: 1em;
+  margin-left: -20em;
+  position: absolute;
 }
 .border_left{
   border-right: 1px dashed #f2f2f2;
@@ -140,5 +135,8 @@ but you'd use "@apply border opacity-50 border-blue-500 bg-gray-200" here */
   opacity: 0.5;
   background: #F7FAFC;
   border: 1px solid #4299e1;
+}
+.blur-content{
+  filter: blur(5px); 
 }
 </style>

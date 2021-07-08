@@ -15,6 +15,7 @@ import Footer from '@/components/layouts/Footer.vue'
 
 export default {
   name: 'viewCriteria',
+  title: 'UIT - Tiêu Chí',
   components: {
     Criteria,
     Header,

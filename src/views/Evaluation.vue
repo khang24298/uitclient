@@ -15,6 +15,7 @@ import Footer from '@/components/layouts/Footer.vue'
 
 export default {
   name: 'viewEvaluation',
+  title: 'UIT - Đánh giá',
   components: {
     Evaluation,
     Header,

@@ -15,6 +15,7 @@ import Footer from '@/components/layouts/Footer.vue'
 
 export default {
   name: 'viewProject',
+  title: "UIT - Quản lý dự án",
   components: {
     Project,
     Header,

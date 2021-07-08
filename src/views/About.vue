@@ -16,6 +16,7 @@ import Footer from '@/components/layouts/Footer.vue'
 
 export default {
   name: 'About',
+  title: 'UIT - Về chúng tôi',
   components: {
     Header,
     Sidebar,
