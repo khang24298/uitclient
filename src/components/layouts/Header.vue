@@ -34,17 +34,15 @@
             </div>
           </div>
         </form>
-      </div>
-
-      <!-- Right navbar links -->
-        <!-- Notifications Dropdown Menu -->
-        <li class="nav-item dropdown list-unstyled">
-          <b-dropdown href="#" variant="default" toggle-class="text-decoration-none">
+        <li class="ml-5 nav-item dropdown list-unstyled">
+          <b-dropdown variant="default" toggle-class="text-decoration-none">
             <template #button-content>
               <i class="far fa-bell"></i>
+              <span class="badge badge-danger count-noti">{{ countNoti}}</span>
             </template>
             <div class="dropdown-noti">
-            <b-dropdown-item v-for="noti in orderBy(userNotis,'id',-1)" :key="noti.id" class="dropdown-item">
+            <b-dropdown-item v-for="noti in orderBy(userNotis,'created_at',-1)" 
+            :key="noti.id" @click="updateNoti(noti)" class="dropdown-item">
               <!-- Message Start -->
               <div class="dropdown-divider"></div>
 
@@ -56,6 +54,10 @@
             <a href="/mailbox" class="border-top dropdown-item dropdown-footer">See All Messages</a>
           </b-dropdown>
         </li>
+
+      </div>
+
+      <!-- Right navbar links -->
        
     </div>
   </nav>
@@ -73,6 +75,7 @@ export default {
   data(){
     return{
       userNotis:[],
+      countNoti:null,
       num:5
     }
   },
@@ -82,17 +85,54 @@ export default {
   computed: {
     ...mapGetters({
       user: 'auth/user'
-    })    
+    }),  
   },
   mounted(){
     this.axios.get(`/getNotificationByUserID/`+this.user.id)
     .then(res=>{
+      this.countNoti = (res.data.data.filter(item => item.has_seen == 0).length >= 10) ? "9+" : res.data.data.filter(item => item.has_seen == 0).length
       this.userNotis = res.data.data.splice(0,this.num)
     })
   },
   methods:{
     loadMore(){
       this.num += 5;
+    },
+    formatUrl(noti) {
+        let content = JSON.parse(noti.content);
+        let url = "#";
+        switch(Number(noti.type_id)){
+            case 1:
+                url = '/project/'+content.id
+                break;
+            case 2:
+                url = '/project/'+content.project_id+'?task='+content.id
+                break;
+            case 3:
+                url = '/criteria/'+content.id
+                break;
+            case 4:
+                url = '/evaluation/';
+            break;
+            default:
+                break;
+        }
+        return url;
+    },
+    updateNoti(noti){
+      if(noti.has_seen == 0){
+        this.axios.put(`/updateHasSeenColumn/`+noti.id)
+        .then(res=>{
+          if(res.data.data){
+            this.$router.push(this.formatUrl(noti))
+          }
+        })
+      }
+      else{
+        this.$router.push(this.formatUrl(noti))
+      }
+      
+      
     }
   }
 }
@@ -113,5 +153,9 @@ export default {
 }
 .dropdown-toggle::after{
   content:none!important;
+}
+.badge{
+  position:absolute!important;
+  font-size: 0.9rem;
 }
 </style>

@@ -2,22 +2,22 @@
   <div class="wrapper">
     <Header />
     <Sidebar />
-    <Report />
+    <Projects />
     <Footer />
   </div>
 </template>
 
 <script>
-import Report from '@/components/report/Report.vue'
+import Projects from '@/components/projects/Projects.vue'
 import Header from '@/components/layouts/Header.vue'
 import Sidebar from '@/components/layouts/Sidebar.vue'
 import Footer from '@/components/layouts/Footer.vue'
 
 export default {
-  name: 'viewReport',
-  title: "UIT - Báo cáo thống kê",
+  name: 'viewProjects',
+  title: "UIT - Dự án",
   components: {
-    Report,
+    Projects,
     Header,
     Sidebar,
     Footer

@@ -1,5 +1,5 @@
 <template>
-    <b-modal size="xl" ref="modalCreate" id="modalCreate" hide-backdrop >
+    <b-modal size="lg" ref="modalCreate" id="modalCreate" hide-backdrop >
         <template #modal-title>
             <h4>Tạo mới công việc</h4>
         </template>

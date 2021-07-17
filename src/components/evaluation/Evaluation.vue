@@ -56,7 +56,9 @@
           <div class="card p-2 user-info col-12">
             <h4 class="text-center border-bottom">{{ userInfo.name}}</h4>
             <div class="d-flex col-lg-12">
-              <img class="col-lg-4 user-logo" src="../../../public/img/user2-160x160.jpg" alt="User Image">
+              <div class="circle " >
+                <span class="initials">{{ formatName(userInfo.name) }}</span>  
+              </div>
               <p class="phone col-lg-4">
                 <b>Phone:</b> <br>
                 {{ userInfo.phone}}
@@ -107,7 +109,7 @@
               </div>
               <div class="btn bg-white borderd shadow col-12 mt-1" v-for="task in taskUserEvaluation" :key="task.id">
                 <span class="col-1 float-left">{{ task.id }}</span>
-                <router-link class="col-5 float-left" :to="'/project/'+task.project_id+'?task='+task.id"><span style="color:blue!important; text-decoration:underline;">{{ task.task_name }}</span></router-link>
+                <router-link class="col-5 float-left" :to="'/project/'+task.project_id+'?task='+task.task_id"><span style="color:blue!important; text-decoration:underline;">{{ task.task_name }}</span></router-link>
                 <span class="col-2 float-left">{{ task.score }}</span>
                 <span class="col-4 float-left">{{ task.created_at | filterDate }}</span>
               </div>
@@ -176,10 +178,15 @@ export default {
         }
       })
       this.axios.get(`/getTaskEvaluationListByUserId/`+this.userInfo.id+'/'+this.month +'/'+this.year)
-      .then(res => console.log(res))
+      .then(res => this.taskUserEvaluation = res.data.data)
     }
   },
   methods:{
+    formatName(name){
+        let fullname = name.split(' ')
+        let initials = fullname.shift().charAt(0) + fullname.pop().charAt(0);
+        return initials.toUpperCase();
+    },
     openHover(e){
       this.idHover = e
     },
@@ -278,5 +285,19 @@ li .user-logo{
   padding: 10px 0;
   background: #fff;
   border-radius: 100px;
+}
+.circle {
+  height: 10rem;
+  text-align: center;
+  width: 10rem;
+  background-color: #ccc;
+  position: relative;
+}
+
+.initials {
+  font-size: calc(10rem / 2); /* 50% of parent */
+  line-height: 1;
+  position: relative;
+  top: calc(10rem / 5); /* 25% of parent */
 }
 </style>

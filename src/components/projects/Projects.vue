@@ -47,7 +47,7 @@
                           Thành viên
                       </th>
                       <th>
-                          Tiến độ
+                          {{ (userInfo.role > 2) ? "Tiến độ dự án" : "Tiến độ của bạn"}}
                       </th>
                       <th style="width: 8%" class="text-center">
                           Kết thúc

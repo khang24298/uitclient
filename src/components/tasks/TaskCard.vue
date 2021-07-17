@@ -35,7 +35,7 @@
       </div>
     </div>
     
-    <b-modal hide-backdrop size="xl" ref="modal_task" :id="'modal_'+task.id" @show="getOthersData(task.id)"> 
+    <b-modal hide-backdrop size="lg" ref="modal_task" :id="'modal_'+task.id" @show="getOthersData(task.id)"> 
         <template #modal-title>
             <div>
               <h4>{{ task.task_name}}</h4>
@@ -43,6 +43,7 @@
               :options="status_list"
               value-field="type_id"
               text-field="name"
+              @change="checkStatus(task.status_id)"
               ></b-select>
               <b-button v-if="task.status_id == 3 && user.role > 2" variant="primary"  @click.prevent="evaluate">
                   Đánh giá
@@ -288,15 +289,25 @@ export default {
           id:1,
           name:"Task"
       },
+      oldStatus:null,
+      newStatus:null,
     }
   },
+ 
   mounted(){
     if(Number(this.$route.query.task) == Number(this.task.id)){
       let task_modal = 'modal_'+ Number(this.$route.query.task)
       this.$bvModal.show(task_modal)
     }
+    this.oldStatus = this.task.status_id
   },
   methods:{
+    checkStatus(status){
+      if(this.user.role <=2 && status >= 4){
+        alert("Không thể chuyển trạng thái");
+        this.task.status_id = this.oldStatus;
+      }
+    },
     formatName(name){
       let fullname = name.split(' ')
       let initials = fullname.shift().charAt(0) + fullname.pop().charAt(0);
@@ -420,7 +431,7 @@ export default {
         return "<span class='text-warning'> hết hạn <strong >hôm nay</strong></span>" 
       }
       if(result < 0){
-        return "<span class='text-danger'> hết hạn <strong >" + result*(-1) + "</strong> ngày"
+        return "<span class='text-danger'> quá hạn <strong >" + result*(-1) + "</strong> ngày"
       }
     },
     onSubmitReject(){
@@ -440,6 +451,7 @@ export default {
       })
     },
     evaluate(){
+      document.getElementById("task-criteria").focus();
       this.isEvaluate = !this.isEvaluate
       this.axios.get(`/getTaskCriteriaByTaskID/`+this.task.id)
       .then((val)=>{

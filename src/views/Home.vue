@@ -2,7 +2,7 @@
   <div class="wrapper">
     <Header />
     <Sidebar />
-    <Projects />
+    <Report />
     <Footer />
     <aside class="control-sidebar control-sidebar-dark">
     </aside>
@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import Projects from '@/components/projects/Projects.vue'
+import Report from '@/components/report/Report.vue'
 import Header from '@/components/layouts/Header.vue'
 import Sidebar from '@/components/layouts/Sidebar.vue'
 import Footer from '@/components/layouts/Footer.vue'
@@ -19,7 +19,7 @@ export default {
   name: 'Home',
   title: 'UIT - Trang chủ',
   components: {
-    Projects,
+    Report,
     Header,
     Sidebar,
     Footer

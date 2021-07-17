@@ -206,7 +206,7 @@ import { mapGetters } from 'vuex'
 import ProjectReport from '@/components/report/ProjectReport.vue'
 export default {
   name: 'Report',
-  title: "UIT - Báo cáo/thống kê",
+  title: "UIT - Thống kê",
   components: {
     ProjectReport
   },

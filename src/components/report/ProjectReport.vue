@@ -16,14 +16,18 @@
                 <tr>
                     <th>Mã công việc</th>
                     <th>Tên công việc</th>
+                    <th>Nhân sự</th>
+                    <th>Dự án</th>
                     <th>Trạng thái</th>
                     <th>Ngày hết hạn</th>
                 </tr>
                 </thead>
                 <tbody>
                     <tr v-for="pro in orderBy(resultQuery,'id',-1)" :key="pro.id">
-                        <td><router-link :to="'/project/'+pro.id+'?task='+pro.id">{{ pro.id }}</router-link></td>
-                        <td>{{ pro.task_name}}</td>
+                        <td>{{ pro.id}}</td>
+                        <td><router-link target="_blank" :to="'/project/'+pro.id+'?task='+pro.id">{{ pro.task_name }}</router-link></td>
+                        <td>{{ pro.user_name}}</td>
+                        <td><router-link target="_blank" :to="'/project/'+pro.id">{{ pro.project_name}}</router-link></td>
                         <td v-html="formatStatus(pro.status_id)"></td>
                         <td v-bind:class="{ overdue: formatDateStyle(pro) }">{{ pro.end_date | filterDate }}</td>
                     </tr>

@@ -15,7 +15,7 @@ import Footer from '@/components/layouts/Footer.vue'
 
 export default {
   name: 'viewMailBox',
-  title: "UIT - MailBox",
+  title: "UIT - Thông báo",
   components: {
     MailBox,
     Header,

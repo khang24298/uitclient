@@ -100,8 +100,11 @@ export default {
             })
             .then(val=>{
                 if(val.data.data){
-                    this.comments.push(val.data.data);
                     this.submitFiles(val.data.data)
+                    let data = val.data.data;
+                    data['user_name'] = this.user.name
+                    this.comments.push(data);
+
                 }
                 else{
                     (val.data.message)

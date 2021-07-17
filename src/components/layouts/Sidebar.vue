@@ -42,9 +42,9 @@
                     </router-link>
                 </li>
                 <li class="nav-item">
-                    <router-link to="/report" class="nav-link">
+                    <router-link to="/projects" class="nav-link">
                     <i class="nav-icon far fa-calendar-alt"></i>
-                    <p>Thống kê</p>
+                    <p>Dự án</p>
                     </router-link>
                 </li>
                 <li class="nav-item" v-if="user.role > 2">

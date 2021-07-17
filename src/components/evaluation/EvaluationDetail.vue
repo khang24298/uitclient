@@ -54,9 +54,9 @@
                   <span v-if="isEvaluate == true" class="col-lg-3 text-danger font-italic">
                       *Hệ thống sẽ thiết lập điểm tối đa nếu để trống
                   </span> 
-                  <div class="choosenCriteria mt-2 col-lg-10">
+                  <div class="choosenCriteria mt-2 col-lg-8">
                     <div class="item d-flex" v-for="item in choosenCriteria" :key="item.id" >
-                        <b-button @mouseover="openHover(item.id)" @mouseleave="closeHover()" class="bg-white borderd shadow col-lg-10 mt-1">
+                        <b-button @mouseover="openHover(item.id)" @mouseleave="closeHover()" class="bg-white borderd shadow col-lg-12 mt-1">
                           <div class="popup" v-if="idHover == item.id"><p class="inner">{{ item.description }}</p></div>
                           <span class="float-left" >{{ item.criteria_name }}</span>
                           <strong class="col-md-1" >Điểm tối đa: {{ item.max_score }}</strong>

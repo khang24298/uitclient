@@ -67,11 +67,11 @@ export default {
       criteria_types:[
         {
           id:1,
-          name:"Task"
+          name:"Công việc"
         },
         {
           id:2,
-          name:"User"
+          name:"Nhân sự"
         }
       ],
       taskCriteriaList: [],

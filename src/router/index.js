@@ -7,7 +7,7 @@ import Project from '../views/Project.vue'
 import viewEvaluation from '../views/Evaluation.vue'
 import viewCriteria from '../views/Criteria.vue'
 import viewRanking from '../views/Ranking.vue'
-import viewReport from '../views/Report.vue'
+import viewProjects from '../views/Projects.vue'
 import viewMailBox from '../views/MailBox.vue'
 import store from '@/store'
 
@@ -114,9 +114,9 @@ const routes = [
     }
   },
   {
-    path: '/report',
-    name: 'viewReport',
-    component: viewReport, 
+    path: '/projects',
+    name: 'viewProjects',
+    component: viewProjects, 
     beforeEnter: (to, from, next) => {
       // (store.getters)
       if(!store.getters['auth/authenticated']){
