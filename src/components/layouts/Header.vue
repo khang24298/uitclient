@@ -91,7 +91,7 @@ export default {
     this.axios.get(`/getNotificationByUserID/`+this.user.id)
     .then(res=>{
       this.countNoti = (res.data.data.filter(item => item.has_seen == 0).length >= 10) ? "9+" : res.data.data.filter(item => item.has_seen == 0).length
-      this.userNotis = res.data.data.splice(0,this.num)
+      this.userNotis = res.data.data.reverse().splice(0,this.num)
     })
   },
   methods:{

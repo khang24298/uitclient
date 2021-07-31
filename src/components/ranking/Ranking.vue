@@ -4,7 +4,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class=" card-title">BẢNG XẾP HẠNG</h3>
+                        <h3 class=" card-title"><b>BẢNG XẾP HẠNG</b></h3>
                         <input class="ml-5 border border-light" type="date" name="date" v-model="date" id="date" @change="changeDate($event)"/>
 
                         <div class="card-tools">
@@ -68,20 +68,20 @@ export default {
         }
     },
     mounted(){
-        this.axios.get(`/getRankListByMonth/`+this.month+`/`+this.year)
+        this.axios.get(`/getRankListInUserDepartmentByMonth/`+this.month+`/`+this.year)
         .then(res=>{
             this.userRankList = res.data.data
         })
     },
     watch: {
       month:function(){
-         this.axios.get(`/getRankListByMonth/`+this.month+`/`+this.year)
+         this.axios.get(`/getRankListInUserDepartmentByMonth/`+this.month+`/`+this.year)
         .then(res=>{
             this.userRankList = res.data.data
         })
       },
       year:function(){
-         this.axios.get(`/getRankListByMonth/`+this.month+`/`+this.year)
+         this.axios.get(`/getRankListInUserDepartmentByMonth/`+this.month+`/`+this.year)
         .then(res=>{
             this.userRankList = res.data.data
         })

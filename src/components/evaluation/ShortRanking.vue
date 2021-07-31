@@ -75,20 +75,20 @@ export default {
         }
     },
     mounted(){
-        this.axios.get('/getRankListByMonth/'+ this.month +'/'+this.year)
+        this.axios.get('/getRankListInUserDepartmentByMonth/'+ this.month +'/'+this.year)
         .then(res=>{
             this.userPerformaceList = res.data.data
         })
     },
     watch: {
         month:function(){
-            this.axios.get('/getRankListByMonth/'+ this.month +'/'+this.year)
+            this.axios.get('/getRankListInUserDepartmentByMonth/'+ this.month +'/'+this.year)
             .then(res=>{
                 this.userPerformaceList = res.data.data
             })
         },
         year:function(){
-            this.axios.get('/getRankListByMonth/'+ this.month +'/'+this.year)
+            this.axios.get('/getRankListInUserDepartmentByMonth/'+ this.month +'/'+this.year)
             .then(res=>{
                 this.userPerformaceList = res.data.data
             })

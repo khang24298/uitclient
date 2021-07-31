@@ -167,7 +167,7 @@ export default {
       },
       manager_list: [],
       staff_list: [],
-      fromTask:'Task',
+      fromTask:'Công việc',
       choosenCriteria:[],
       selectedCriteria:[],
       isExist: false,
@@ -176,7 +176,7 @@ export default {
       criteria_types:
       {
       id: 1,
-      name: "Task",
+      name: "Công việc",
       },
       idHover:null,
     }

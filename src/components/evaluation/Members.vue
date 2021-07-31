@@ -3,8 +3,10 @@
         <div class="card">
           <div class="card-header row ml-0">
             <div class="col-lg-3">
-              <h3 class="card-title">Thành viên</h3>
+              <h3 class="card-title">Nhân sự đã đánh giá</h3>
+              
             </div>
+            
             <div class="search-user col-lg-7">
               <form class="form-inline ml-3">
                 <div class="input-group input-group-sm">
@@ -17,9 +19,9 @@
                 </div>
               </form>
             </div>
-            <div class="card-tools">
-              <span class="badge badge-danger">Tổng cộng {{ usersList.length }} thành viên</span>
-            </div>
+              <div class="card-tools">
+                <span class="badge badge-danger">{{ (usersList) ? usersList.length : "0"}} người</span>
+              </div>
           </div>
           <!-- /.card-header -->
           <div class="card-body p-0">
@@ -39,7 +41,6 @@
           </div>
           <!-- /.card-body -->
           <div class="card-footer text-center">
-            <a href="javascript:void" v-on:click="loadMore"><i class="fa fa-angle-double-down" aria-hidden="true"></i></a>
           </div>
           <!-- /.card-footer -->
         </div>

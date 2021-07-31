@@ -1,5 +1,7 @@
 <template>
   <div class="content-wrapper">
+      <div class=" pl-3"><h3>Tiêu chí</h3></div>
+    <br>
     <div class="container-fluid">
       <div class="row">
         <div class="col-lg-2 create-criteria text-center">
@@ -9,12 +11,12 @@
         </div>
         <div class="col-lg-4 text-center">
           <div class="header">
-            <h1>Tiêu chí công việc</h1>
+            <h3>Tiêu chí công việc</h3>
           </div>
         </div>
         <div class="col-lg-4 text-center">
           <div class="header">
-            <h1>Tiêu chí nhân sự</h1>
+            <h3>Tiêu chí tác phong</h3>
           </div>
         </div>
       </div>
@@ -24,7 +26,7 @@
 
       </div>
       <div class="col-lg-5 rounded px-3 pt-2 pb-2">
-        <Criterion class="criterion1 bg-white shadow text-center mb-3 h-5" 
+        <Criterion class="criterion1 bg-white shadow text-left mb-3 h-5" 
         v-for="taskCriterion in taskCriteriaList.data" :key="taskCriterion.id" 
         :criterion="taskCriterion"/>
         <b-pagination
@@ -34,7 +36,7 @@
         ></b-pagination>
       </div>
       <div class="col-lg-5 rounded px-3 pt-2 pb-2 ">
-        <Criterion class="criterion1 bg-white shadow text-center mb-3 h-5" 
+        <Criterion class="criterion1 bg-white shadow text-left mb-3 h-5" 
         v-for="userCriterion in userCriteriaList.data" :key="userCriterion.id" 
         :criterion="userCriterion"/>
          <b-pagination

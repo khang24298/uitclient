@@ -33,47 +33,39 @@
             <ul class="nav nav-pills nav-sidebar flex-column text-left" data-widget="treeview" role="menu" data-accordion="false">
             <!-- Add icons to the links using the .nav-icon class
                 with font-awesome or any other icon font library -->
-                <li class="nav-item">
-                    <router-link to="/" class="nav-link">
-                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                <li class="nav-item" :class="[path == '/' ? 'bg-secondary' : '']">
+                    <router-link to="/" class="nav-link" >
+                    <i class="nav-icon fas fa-calendar-alt"></i>
                     <p>
                         Trang chủ
                     </p>
                     </router-link>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" :class="[path == '/projects' ? 'bg-secondary' : '']">
                     <router-link to="/projects" class="nav-link">
-                    <i class="nav-icon far fa-calendar-alt"></i>
+                    <i class="nav-icon fas fa-folder"></i>
                     <p>Dự án</p>
                     </router-link>
                 </li>
-                <li class="nav-item" v-if="user.role > 2">
+                <li class="nav-item" v-if="user.role > 2" :class="[path == '/criteria' ? 'bg-secondary' : '']">
                     <router-link to="/criteria" class="nav-link">
-                    <i class="nav-icon far fa-calendar-alt"></i>
-                    <p>Quản lý tiêu chí</p>
+                    <i class="nav-icon fas fa-thumbtack"></i>
+                    <p>Tiêu chí</p>
                     </router-link>
                 </li>
-                <li class="nav-item">
-                    <router-link to="/evaluation" class="nav-link">
-                    <i class="nav-icon far fa-circle text-info"></i>
+                <li class="nav-item" :class="[path == '/evaluation' ? 'bg-secondary' : '']">
+                    <router-link to="/evaluation" class="nav-link" >
+                    <i class="nav-icon fas fa-gavel"></i>
                     <p>Đánh giá</p>
                     </router-link>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" :class="[path == '/ranking' ? 'bg-secondary' : '']">
                     <router-link to="/ranking" class="nav-link">
-                    <i class="nav-icon far fa-circle"></i>
+                    <i class="nav-icon fas fa-medal"></i>
                     <p>Xếp hạng</p>
                     </router-link>
                 </li>
-                
-                <li class="nav-item">
-                    <router-link to="/about" class="nav-link">
-                    <i class="nav-icon far fa-calendar-alt"></i>
-                    <p>
-                        Về chúng tôi
-                    </p>
-                    </router-link>
-                </li>
+              
             </ul>
         </nav>
         </div>
@@ -87,13 +79,19 @@ export default {
     name:"SideBar",
     data(){
         return{
+            path:"",
         }
+    },
+    mounted(){
+        this.path = this.$route.path;
+        console.log(this.path);
     },
     computed:{
       ...mapGetters({
           authenticated: 'auth/authenticated',
           user: 'auth/user'
-      })
+      }),
+
     },
     methods: {
         formatName(name){
@@ -119,6 +117,7 @@ export default {
               console.log(err)
           })
         }
+       
     }
 }
 </script>

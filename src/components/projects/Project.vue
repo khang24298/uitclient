@@ -1,5 +1,6 @@
 <template>
   <div class="content-wrapper overflow-auto">
+    <div class="p-3 m-1 card-body"><h4><router-link to="/projects" class="text-primary">Dự án</router-link> / <span class="">{{project.project_name}}</span></h4></div>
     <div class="tasks-board">
       <div class="btn-create-task" v-if="user.role > 2">
           <b-button id="btn-modal" v-b-modal.modalCreate class="bg-primary shadow border-0 btn-add">
@@ -52,6 +53,7 @@ export default {
       status_list: [],
       user: Object,
       taskCriteria: [],
+      project:{}
     };
   },
   computed: {
@@ -60,14 +62,14 @@ export default {
     })
   },
   mounted () {
-    // this.axios.get(`/project/`+this.params.id).then(res => this.project = res.data.data)
+    this.axios.get(`/projects/`+this.$route.params.id).then( res => this.project = res.data.data)
     this.user = (this.userInfo) ? this.userInfo : null
     this.axios.get('/status').then(res => this.status_list = res.data.data)
     this.axios.get(`/getTasksByProjectID/`+this.$route.params.id).then( res => this.tasksLists = res.data.data)
     this.axios.post('/getTaskCriteriaList').then(res=> this.taskCriteria = res.data.data)
     this.axios.get('/getUsersWithEmployeeRole').then( res => this.staff_list = res.data.data)
     this.axios.get('/getUsersWithManagerRole').then( res => this.manager_list = res.data.data)
-  },
+  }, 
   methods: {
     reload(e){
         (e)

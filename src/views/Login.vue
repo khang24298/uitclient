@@ -2,9 +2,9 @@
     <div class="login-page">
         <div class="login-box mx-auto">
             <div class="login-logo">
-                <a href="../../index2.html"><b style="color:white">UIT WORK</b></a>
+                <a href="/"><b>UIT WORK</b></a>
             </div>
-            <div class="card">
+            <div class="card login-body">
                 <div class="card-body login-card-body">
                 <p class="login-box-msg">Đăng nhập để bắt đầu công việc nào!</p>
 
@@ -93,6 +93,16 @@ export default {
 
 <style scoped>
 .login-page{
-    background-image: url("https://www.chetu.com/img/blogs/sliderbg/oracle-erp-banner.jpg");
+    background-image: url("../../public/img/background_login.jpeg");
+    background-position: bottom;
+    background-repeat: no-repeat;
+}
+.login-logo{
+    background-color:white;
+    border: 1px solid silver;
+    border-radius:5px;
+}
+.login-box .login-body .login-card-body{
+    border-radius: 10px;
 }
 </style>

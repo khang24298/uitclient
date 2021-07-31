@@ -8,10 +8,6 @@
             <h1>Dự án</h1>
           </div>
           <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
-              <li class="breadcrumb-item active">Dự án</li>
-            </ol>
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -82,7 +78,7 @@
                           </ul>
                       </td>
                       <td class="project_progress">
-                          <k-progress :percent="item.progress" :color="getColor(item.progress)"></k-progress>
+                          <k-progress :percent="item.progress.toFixed(0)" :color="getColor(item.progress)"></k-progress>
                         
                       </td>
                       <td class="project-state">

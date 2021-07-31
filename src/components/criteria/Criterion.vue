@@ -1,8 +1,8 @@
 <template>
     <div class="criterion">
         <b-button class="bg-white border-0 w-100 d-flex" id="toggle-btn" v-b-modal="'modal_'+criterion.id">
-            <div class="title col-lg-9">{{criterion.criteria_name}}</div>
-            <div class="score col-lg-3"><strong>Max: {{criterion.max_score}}</strong></div>
+            <div class="title col-lg-9 text-left">{{criterion.criteria_name}}</div>
+            <div class="score col-lg-3"><strong>Tối đa: {{criterion.max_score}}</strong></div>
         </b-button>
         <b-modal hide-backdrop ref="modal" :id="'modal_'+criterion.id">
             <template #modal-title>

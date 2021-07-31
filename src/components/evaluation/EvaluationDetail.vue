@@ -2,15 +2,24 @@
   <!-- Modal -->
     <li>
       <b-button class="user" id="btn-toggle-user" v-b-modal="'modal_'+user.id">
-        <img class="user-logo" src="../../../public/img/user2-160x160.jpg" alt="User Image">
+          <div class="image">
+                <div class="circle border shadow" >
+                    <span class="initials">{{ formatName(user.name) }}</span>  
+                </div>
+            </div>
       </b-button>
       <a class="users-list-name" href="#">{{ user.name }}</a>
-      <span class="users-list-date">Joined: <b>{{ user.created_at | filterDate }}</b></span>
+      <span v-if="user.evaluated_at" class="users-list-date">Ngày ĐG: <b>{{ user.evaluated_at | filterDate }}</b></span>
+      <span v-else class="user-list-date">Chưa ĐG</span>
       <b-modal hide-backdrop @show="getUserCriteriaByUserId(user.id)" modal-class="user-modal" size="xl" ref="modal_user" :id="'modal_'+user.id"> 
         <template #modal-title>
             <div>
               <h4>{{ user.name}}</h4>
-              <img class="user-logo" src="../../../public/img/user2-160x160.jpg" alt="User Image">
+              <div class="image">
+                <div class="circle border shadow" >
+                    <span class="initials">{{ formatName(user.name) }}</span>  
+                </div>
+              </div>
               <b-button v-if="isEvaluate == false && hasBeenEvalued == false && choosenCriteria.length > 0" variant="primary" @click="isEvaluate = !isEvaluate">
                   Đánh giá
               </b-button>
@@ -25,7 +34,7 @@
               <span class="col-4"><b>Email:</b> {{ user.email }}</span>
               <span class="col-4">
                 <b>Phòng/Khoa:</b>
-                Khoa học và Kỹ thuật thông Tin
+                Phòng Tổ Chức Hành Chính
               </span>
               <span class="col-4" v-if="hasBeenEvalued == true">
                 <b>Tổng điểm đánh giá:</b>
@@ -136,22 +145,12 @@ export default {
       evaluationCount:[],
     }
   },
-  watch: {
-      month:function(){
-          this.axios.get('/getRankListByMonth/'+ this.month +'/'+this.year)
-          .then(res=>{
-              this.userPerformaceList = res.data.data
-          })
-      },
-      year:function(){
-          this.axios.get('/getRankListByMonth/'+ this.month +'/'+this.year)
-          .then(res=>{
-              this.userPerformaceList = res.data.data
-          })
-      }
-      
-  },
   methods:{
+    formatName(name){
+          let fullname = name.split(' ')
+          let initials = fullname.shift().charAt(0) + fullname.pop().charAt(0);
+          return initials.toUpperCase();
+      },
     openHover(e){
       this.idHover = e
     },
@@ -249,6 +248,7 @@ li .user-logo{
 .latest>li img{
   border: 3px solid #03fc1c
 }
+
 .user-modal{
   background:wheat;
 }
@@ -283,5 +283,21 @@ li .user-logo{
 .btn-create{
   position: absolute;
   right: 25%;
+}
+
+.circle {
+  border-radius: 50%;
+  height: 5.5rem;
+  text-align: center;
+  width: 5.5rem;
+  background-color: #ccc;
+  position: relative;
+}
+
+.initials {
+  font-size: calc(5.5rem / 2); /* 50% of parent */
+  line-height: 1;
+  position: relative;
+  top: calc(5.5rem / 5); /* 25% of parent */
 }
 </style>

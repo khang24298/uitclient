@@ -3,24 +3,26 @@
     <!-- For manager -->
     <div class="row" v-if="userInfo.role > 2">
       <div class="col-lg-12 d-flex bg-white border m-1 pt-1 text-center">
-        <h3 class="col-lg-6 text-left"><strong class="text-left">UIT Evaluation</strong></h3>
+        <h3 class="col-lg-6 text-left"><strong class="text-left">Đánh giá tác phong</strong></h3>
         <input class="border border-light" type="date" name="date" v-model="date" id="date" @change="changeDate($event)"/>
       </div>
       <div class="col-lg-4">
-        <!-- USERS LIST LATEST -->
+        <!-- USERS LIST IS NOT EVALUATED -->
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title">Thành viên mới</h3>
+            <h3 class="card-title">Nhân sự chưa đánh giá</h3>
 
             <div class="card-tools">
-              <span class="badge badge-danger">4 thành viên mới</span>
+              <span class="badge badge-danger">{{ (usersList['listUserNotEvaluated']) ? usersList['listUserNotEvaluated'].length : "0"}} người</span>
 
             </div>
           </div>
           <!-- /.card-header -->
           <div class="card-body p-0">
-            <ul class="users-list clearfix latest">
-              <evaluation-detail v-for="item in limitBy(orderBy(usersList, 'id', -1),4)" 
+            <p v-if="!usersList['listUserNotEvaluated']" class="p-3">Tất cả nhân sự đã được đánh giá</p>
+            <ul v-else class="users-list clearfix latest">
+              
+              <evaluation-detail v-for="item in orderBy(usersList['listUserNotEvaluated'], 'id', -1)" 
               :key="item.id"
               :user="item"
               :userCriteria="userCriteria"
@@ -40,7 +42,7 @@
         <Ranking :month="month" :year="year"/>
         <!--/.card -->
       </div>
-      <Members :usersList="limitBy(usersList,usersList.length-4)" :userCriteria="userCriteria" :month="month" :year="year"/>
+      <Members :usersList="usersList['listUserEvaluated']" :userCriteria="userCriteria" :month="month" :year="year"/>
     </div>
 
     <!-- For Staff -->
@@ -76,11 +78,12 @@
                 <br>
                 <br>
                 <b>Phòng/Khoa:</b> <br>
-                Khoa học và Kỹ thuật thông Tin
+                Phòng Tổ Chức - Hành Chính
               </p>
             </div>
           </div>
           <div class="user-evaluation">
+            <div class="card-body bg-white border mb-1 text-center"><span class="text-center">Điểm đánh giá tác phong</span></div>
             <div class="item d-flex" v-for="item in staffCriteria" :key="item.id">
               <b-button @mouseover="openHover(item.id)" @mouseleave="closeHover()" class="bg-white borderd shadow col-lg-8 mt-1">
                 <div class="popup" v-if="idHover == item.id && item.description !== ''"><p class="inner">{{ item.description }}</p></div>
@@ -100,6 +103,7 @@
         </div>
         <div class="col-6">
           <div class="card">
+            <div class="card-body bg-white border mb-1 text-center"><span>Điểm đánh giá công việc</span></div>
             <div class="">
               <div class="bg-gray border-bottom d-flex text-center ">
                 <span class="col-1 text-bold">ID</span>
@@ -160,11 +164,13 @@ export default {
   mounted(){
     if(this.userInfo.role > 2){
 
-      this.axios.get('/users').
-      then(res=>this.usersList = res.data.data )
+      this.axios.get(`/getListUserEvaluationByMonth/`+this.month+'/'+this.year)
+      .then(res=>{
+        this.usersList = res.data.data 
+      })
 
-      this.axios.post("/getUserCriteriaList").
-      then( res => this.userCriteria = res.data.data)
+      this.axios.post("/getUserCriteriaList")
+      .then( res => this.userCriteria = res.data.data)
     }
     else{
 
@@ -217,6 +223,13 @@ export default {
           this.axios.get(`/getTaskEvaluationListByUserId/`+this.userInfo.id+'/'+this.month +'/'+this.year)
           .then(res => this.taskUserEvaluation = res.data.data)
         }
+        else{
+          this.axios.get(`/getListUserEvaluationByMonth/`+this.month+'/'+this.year)
+            .then(res=>{
+              this.usersList = res.data.data 
+            })
+        }
+       
       },
       year:function(){
         if(this.userInfo.role <= 2){
@@ -233,6 +246,12 @@ export default {
 
           this.axios.get(`/getTaskEvaluationListByUserId/`+this.userInfo.id+'/'+this.month +'/'+this.year)
           .then(res => this.taskUserEvaluation = res.data.data)
+        }
+        else{
+          this.axios.get(`/getListUserEvaluationByMonth/`+this.month+'/'+this.year)
+            .then(res=>{
+              this.usersList = res.data.data 
+            })
         }
       }
       
@@ -254,6 +273,9 @@ li .user-logo{
   cursor: pointer;
   margin: 0;
   padding: 0;
+}
+.latest li{
+  width:32%;
 }
 .user-logo{
   width: 6em;
