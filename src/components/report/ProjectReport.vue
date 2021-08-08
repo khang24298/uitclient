@@ -3,10 +3,10 @@
         <div class="col-12">
             <div class="card">
             <div class="card-header d-flex border-transparent">
-                <h3 class="card-title col-lg-3">Thống kê dự án</h3>
+                <div class="col-lg-9">
+                </div>
                 <div class="col-lg-3">
-                        <h3 class="card-title">Search</h3>
-                        <b-form-input v-model="searchQuery"></b-form-input>
+                        <b-form-input v-model="searchQuery" placeholder="Tìm kiếm"></b-form-input>
                 </div>
             </div>
             <div class="card-body p-0">

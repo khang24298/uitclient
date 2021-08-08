@@ -138,6 +138,8 @@
 <script>
 import CriterionNew from '@/components/criteria/CriterionNew'
 import { VueEditor } from "vue2-editor";
+import { mapGetters } from 'vuex'
+
 var today = new Date()
 // var date = today.getDate()+ '/'+ (today.getMonth()+1)+ '/' + today.getFullYear()
 export default {
@@ -161,7 +163,7 @@ export default {
         assignee_id:"",
         start_date: today.toISOString().slice(0,10),
         end_date:today.toISOString().slice(0,10),
-        qa_id:"",
+        qa_id: "13",
         priority:"",
         project_id: this.$route.params.id
       },
@@ -181,6 +183,11 @@ export default {
       idHover:null,
     }
     
+  },
+  computed:{
+    ...mapGetters({
+      user:'auth/user'
+    })
   },
   mounted(){
   },

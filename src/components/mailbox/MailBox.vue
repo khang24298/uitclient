@@ -120,7 +120,7 @@
                         <label for="check1"></label>
                       </div>
                     </td>
-                    <td class="mailbox-star"><a href="#"><i class="fas fa-star text-warning"></i></a></td>
+                    <td class="mailbox-star" v-if="noti.has_seen == 0"><a href="#"><i class="fas fa-circle text-primary"></i></a></td>
                     <td class="mailbox-subject"><b>{{ noti.type_name.toUpperCase() }}</b></td>
                     <td class="mailbox-subject"><router-link target="_blank" :to="formatUrl(noti)"> {{ noti.message }}</router-link></td>
                     <td class="mailbox-date">{{ noti.updated_at | filterTime }}</td>
@@ -223,7 +223,8 @@ export default {
                     break;
             }
           return url;
-        }
+        },
+        
     }
 }
 </script>

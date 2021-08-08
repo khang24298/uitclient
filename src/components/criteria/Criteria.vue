@@ -14,7 +14,7 @@
             <h3>Tiêu chí công việc</h3>
           </div>
         </div>
-        <div class="col-lg-4 text-center">
+        <div class="col-lg-5 text-center">
           <div class="header">
             <h3>Tiêu chí tác phong</h3>
           </div>

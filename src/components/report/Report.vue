@@ -4,11 +4,25 @@
     <div class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0">Trang chủ </h1>
+          <div class="col-sm-5">
+            <h3 class="m-0">Trang chủ </h3>
           </div><!-- /.col -->
           <div class="col-sm-6">
-           
+            <div class="col-3 text-center">
+              <br>
+              <div class="d-flex ">
+                <b-form-input class="col-12" type="number" v-model="time">
+                </b-form-input>
+                <b-form-select
+                          id="type"
+                          class="col-12"
+                          v-model="typeSelected"
+                          :options="type"
+                          value-field="value"
+                          text-field="name"
+                ></b-form-select>
+              </div>
+            </div>
           </div><!-- /.col -->
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
@@ -77,8 +91,71 @@
           <!-- /.col -->
         </div>
         <!-- /.row -->
-     
-        <div class="row">
+        <!-- Real Statics -->
+        <h3 v-if="user.role > 2">Thống kê </h3>
+        <div v-if="user.role > 2" class="row">
+          <div class="col-6">
+            <strong class="text-center"><h4>Dự án, công việc</h4> </strong>
+            <div class="card col-lg-12 ">
+              <span class="p-2"> 
+                <strong class="float-left">Dự án hoàn tất/Tổng dự án:</strong> 
+                <span class="float-right">{{ projectStatics.done_project}}/{{projectStatics.total_project }}</span>
+              </span>
+              <span class="p-2">
+                <strong class="float-left">Tỷ lệ dự án trễ hạn:</strong>  
+                <span class="float-right">{{ (projectStatics.late_project/projectStatics.total_project).toFixed(2)*100 }}%</span>
+              </span>
+               <span class="p-2">
+                <strong class="float-left">Đang triển khai:</strong>  
+                <span class="float-right">{{ projectStatics.on_going_project }}</span>
+              </span>
+            </div>
+            <!-- <div class="card">
+              <span>
+                <strong>Tỷ lệ dự án trễ hạn:</strong>  
+                {{ (projectStatics.late_project/projectStatics.total_project).toFixed(2)*100 }}%
+              </span>
+            </div>
+            <div class="card">
+              <span>
+                <strong>Đang triển khai:</strong>  
+                {{ projectStatics.on_going_project }}
+              </span>
+            </div> -->
+            <div class="card col-lg-12 pb-1">
+              <strong class="p-2">Tỷ lệ công việc/nhân sự theo từng dự án</strong>
+              <div v-for="(project,index) in projectStatics.detail" :key="project.id">
+                  <span class="pl-2 pr-2 float-left">{{ index +1 }}. {{ project.project_name }} </span>
+                  <span class="pl-2 pr-2 float-right" v-if="project.total_tasks != 0 && changeToMilisec(project.start_date) <= today">{{ project.taskPerUser }}/người</span>
+                  <span v-else class="pl-2 pr-2 float-right">Chưa triển khai</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <strong class="text-center"><h4>Nhân sự</h4> </strong>
+
+            <div class="card p-2"><strong class="pb-1">Tăng trường nhân sự:</strong>
+              <div v-for="(item,index) in memberStatics.userGroupByTime" :key="item.id">
+                <span class="float-left pl-2 pr-2">{{ index+1 }}. {{ convertKeyToName(typeSelected) }}: {{ item.key }}  </span>     
+                <span class="float-right pl-2 pr-2"> Số lượng: {{ item.value.length}}</span>
+              </div>
+            </div>
+            <div class="card p-2"><strong class="pb-1">Tỷ lệ công việc/nhân sự theo thời gian</strong> 
+              <div v-for="(item,index) in memberStatics.taskEachUsers" :key="item.id">
+                <span class="float-left pl-2 pr-2 ">{{ index+1 }}. {{ convertKeyToName(typeSelected) }}: {{ item.key }}  </span>     
+                <span class="float-right pl-2 pr-2">{{ item.value.toFixed(2) }}/người</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        
+        <div class="d-flex pb-3">
+          <h3 class="col-2">Bộ lọc dự án</h3>
+          <b-button class="" variant="primary" @click="toggleFilter">{{ showName }}</b-button>
+        </div>
+        <div v-if="isShowFilter === true" class="filterFunction" name="filterFunction">
+          <div class="row">
           <!-- Project filter -->
           <div class="col-3">
             <div class="card">
@@ -134,7 +211,7 @@
           </div>
 
           <!-- Dealine filter -->
-          <div class="col-4">
+          <div class="col-3">
             <div class="card">
               <div class="card-header border-transparent ">
                 <h3 class="card-title">Ngày hết hạn</h3>
@@ -163,10 +240,15 @@
             </div>
           </div>
 
+          <!-- Filter button -->
+          <div class="col-1">
+            <b-button  variant="primary" @click="submitFilter">Lọc</b-button>
+          </div>
+
         </div>
 
         <div class="row">
-          <div class="col-11">
+          <div class="col-12">
             <ul class="list-unstyled d-flex ">
               <li class="ml-2" v-for="(filter,index) in filterQuery" :key="index">
                 <b-button :id="index" class="bg-white borderd shadow mt-1">
@@ -177,9 +259,7 @@
               </li>
             </ul>
           </div>
-          <div class="col-1">
-            <b-button variant="primary" @click="submitFilter">Lọc</b-button>
-          </div>
+          
         </div>
 
         <project-report :projectDetail="projectDetail.tasks"></project-report>
@@ -190,6 +270,8 @@
             :per-page="perPage"
           ></b-pagination>
         </div>
+        </div>
+       
         
       </div><!--/. container-fluid -->
     </section>
@@ -201,12 +283,18 @@
 import Vue2Filters from 'vue2-filters'
 import { mapGetters } from 'vuex'
 import ProjectReport from '@/components/report/ProjectReport.vue'
+import { Pie } from "vue-chartjs"
+import { Line } from 'vue-chartjs'
+
+var curDate = new Date();
+var today = curDate.getTime();
 export default {
   name: 'Report',
   title: "UIT - Thống kê",
   components: {
-    ProjectReport
+    ProjectReport,
   },
+  extends: Pie,Line,
   mixins: [Vue2Filters.mixin],
     data() {
         return{
@@ -223,6 +311,27 @@ export default {
           from_date:null,
           to_date:null,
           filterQuery:[],
+          memberStatics: [],
+          projectStatics: [],
+          today: today,
+          time: 1,
+          type:[
+            {
+              "name":"Năm",
+              "value":"year"
+            },
+            {
+              "name":"Tháng",
+              "value":"month"
+            },
+            {
+              "name":"Ngày",
+              "value":"day"
+            }
+          ],
+          typeSelected: "month",
+          isShowFilter:false,
+          showName: "Hiển thị",
         }
     },
     computed:{
@@ -231,6 +340,14 @@ export default {
       })
     },
     mounted(){
+        this.axios.post('/getMembersStatics',{
+          "type": this.typeSelected,
+          "time": this.time
+        }).then(res=>{ this.memberStatics = res.data.data})
+        this.axios.post('/getProjectStatics',{
+          "type":this.typeSelected,
+          "time":this.time
+        }).then(res=>{this.projectStatics = res.data.data})
         this.axios.get('/status')
         .then(res=>{
             this.statuses = res.data.data
@@ -254,7 +371,10 @@ export default {
             this.projectDetail = val.data.data
           })
         })
-        this.axios.get('/getTheStatistics')
+        this.axios.post('/getTheStatistics',{
+          "type":this.typeSelected,
+          "time":this.time
+        })
         .then(res=>{
             this.statics = res.data.data
         })
@@ -270,7 +390,40 @@ export default {
           this.projectDetail = val.data.data
         })
       },
-      
+      time:function(){
+        this.axios.post('/getMembersStatics',{
+          "type": this.typeSelected,
+          "time": this.time
+        }).then(res=>{ this.memberStatics = res.data.data})
+        this.axios.post('/getProjectStatics',{
+          "type":this.typeSelected,
+          "time":this.time
+        }).then(res=>{this.projectStatics = res.data.data})
+        this.axios.post('/getTheStatistics',{
+          "type":this.typeSelected,
+          "time":this.time
+        })
+        .then(res=>{
+            this.statics = res.data.data
+        })
+      },
+      typeSelected:function(){
+        this.axios.post('/getMembersStatics',{
+          "type": this.typeSelected,
+          "time": this.time
+        }).then(res=>{ this.memberStatics = res.data.data})
+        this.axios.post('/getProjectStatics',{
+          "type":this.typeSelected,
+          "time":this.time
+        }).then(res=>{this.projectStatics = res.data.data})
+        this.axios.post('/getTheStatistics',{
+          "type":this.typeSelected,
+          "time":this.time
+        })
+        .then(res=>{
+            this.statics = res.data.data
+        })
+      }
     },
     methods:{
       check(e){
@@ -288,10 +441,40 @@ export default {
       },
       delFilter(e){
         this.filterQuery.pop(e)
+      },
+      changeToMilisec(time){
+        return new Date(time).getTime()
+      },
+      convertKeyToName(key){
+        let name = "";
+        switch(key){
+          case "year":
+            name = "Năm";
+            break;
+          case "month":
+            name = "Tháng";
+            break;
+          case "day":
+            name = "Ngày";
+            break;
+          default:
+            break;
+        }
+        return name;
+      },
+      toggleFilter(){
+        this.isShowFilter = !this.isShowFilter;
+        if(this.isShowFilter === true){
+          this.showName = "Ẩn";
+        }
+        else{
+          this.showName = "Hiển thị";
+        }
       }
     }
 }
 </script>
+
 <style scoped>
 
 </style>

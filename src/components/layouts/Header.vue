@@ -51,7 +51,7 @@
               <!-- Message End -->
             </b-dropdown-item>
             </div>
-            <a href="/mailbox" class="border-top dropdown-item dropdown-footer">See All Messages</a>
+            <a href="/mailbox" class="border-top dropdown-item dropdown-footer">View All</a>
           </b-dropdown>
         </li>
 

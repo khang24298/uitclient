@@ -106,16 +106,15 @@
             <div class="card-body bg-white border mb-1 text-center"><span>Điểm đánh giá công việc</span></div>
             <div class="">
               <div class="bg-gray border-bottom d-flex text-center ">
-                <span class="col-1 text-bold">ID</span>
                 <span class="col-5 text-bold">Tên công việc</span>
+                <span class="col-5 text-bold">Tiêu chí</span>
                 <span class="col-2 text-bold">Số điểm</span>
-                <span class="col-4 text-bold">Ngày đánh giá</span>
+
               </div>
               <div class="btn bg-white borderd shadow col-12 mt-1" v-for="task in taskUserEvaluation" :key="task.id">
-                <span class="col-1 float-left">{{ task.id }}</span>
-                <router-link class="col-5 float-left" :to="'/project/'+task.project_id+'?task='+task.task_id"><span style="color:blue!important; text-decoration:underline;">{{ task.task_name }}</span></router-link>
-                <span class="col-2 float-left">{{ task.score }}</span>
-                <span class="col-4 float-left">{{ task.created_at | filterDate }}</span>
+                <router-link class="float-left col-5 " :to="'/project/'+task.project_id+'?task='+task.task_id"><span style="color:blue!important; text-decoration:underline;">{{ task.task_name }}</span></router-link>
+                <span class="border-left float-left col-5 ">{{ task.criteria_name }}</span>
+                <span class="border-left float-right col-2 ">{{ task.score }}</span>
               </div>
             </div>
           </div>
